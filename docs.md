@@ -222,3 +222,14 @@ cd /boot
 ```
 efibootmgr --create --disk /dev/partition_boot --part 1 --label "Arch Linux" --loader /vmlinuz-linux-lts --initrd /intel-ucode.img --initrd /booster-linux.img --unicode "$(cat /etc/kernel/cmdline)"
 ```
+
+## booting
+```
+exit
+```
+```
+umount -R /mnt
+```
+```
+reboot
+```
