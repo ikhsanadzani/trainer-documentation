@@ -220,7 +220,7 @@ cd /boot
 /usr/lib/booster/regenerate_images
 ```
 ```
-efibootmgr --create --disk /dev/partition_boot --part 1 --label "Arch Linux" --loader /vmlinuz-linux-lts --initrd /intel-ucode.img --initrd /booster-linux.img --unicode "$(cat /etc/kernel/cmdline)"
+efibootmgr --create --disk /dev/partition_boot --part 1 --label "Arch Linux" --loader /vmlinuz-linux-lts -u "initrd /intel-ucode.img"  -u "initrd /booster-linux.img" unicode "$(cat /etc/kernel/cmdline)"
 ```
 
 ## booting
