@@ -121,7 +121,7 @@ mount -o rw,nodev,nosuid,relatime /dev/proc/home /mnt/home
 ```
 # packages
 ```
-pacstrap /mnt intel linux-lts linux-lts-headers iwd lvm2 base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster
+pacstrap /mnt intel linux-lts linux-lts-headers iwd lvm2 base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster efibootmgr
 ```
 # fstab
 ```
@@ -203,78 +203,22 @@ usermod -aG wheel [user]
 
 ## KERNEL PARAMETER
 ```
-mkdir /etc/cmdline.d
-```
-```
-touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-misc.conf}
-```
-
-## CONFIG KERNEL PARAMETER
-
-### 01-boot.conf
-```
-echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
-```
-### 05-misc.conf
-```
-nvim /etc/cmdline.d/05-misc.conf
-```
-```
-rw quiet
-```
-## PREPARE BOOT
-```
-mkdir /boot/kernel /boot/efi /boot/efi/linux
-```
-### Jika intel
-```
-mv /boot/intel-ucode kernel/
+touch /etc/kernel/cmdline
 ```
 
 ```
-mv /boot/vmlinuz-linux-lts /boot/intel-ucode.img kernel/
-```
-### Jika amd
-```
-mv /boot/amd-ucode kernel/
+echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/proc/root" > /etc/kernel/cmdline
 ```
 
-```
-mv /boot/vmlinuz-linux-lts /boot/amd-ucode.img kernel/
-```
+## secureboot
 
-## MKINITCPIO
+## BOOSTER
 ```
-mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default.conf
-```
-```
-nvim /etc/mkinitcpio.d/default.conf
-```
-change section hooks like this
-```
-HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole sd-encrypt lvm2 block filesystems fsck)
+cd /boot
 ```
 ```
-nvim /etc/mkinitcpio.d/linux.preset
+/usr/lib/booster/regenerate_images
 ```
-
 ```
-# mkinitcpio preset file for the 'linux-lts' package
-
-ALL_config="/etc/mkinitcpio.d/default.conf"
-ALL_kver="/boot/kernel/vmlinuz-linux-lts"
-ALL_kerneldest="/boot/kernel/vmlinuz-linux-lts"
-
-PRESETS=('default')
-#PRESETS=('default' 'fallback')
-
-#default_config="/etc/mkinitcpio.conf"
-#efault_image="/boot/initramfs-linux-lts.img"
-default_uki="/boot/efi/linux/arch-linux-lts.efi"
-#default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
-
-#fallback_config="/etc/mkinitcpio.conf"
-#fallback_image="/boot/initramfs-linux-lts-fallback.img"
-#fallback_uki="/efi/EFI/Linux/arch-linux-lts-fallback.efi"
-#fallback_options="-S autodetect"
+efibootmgr --create --disk /dev/partition_boot --part 1 --label "Arch Linux" --loader /vmlinuz-linux-lts --initrd /intel-ucode.img --initrd /booster-linux.img --unicode "$(cat /etc/kernel/cmdline)"
 ```
