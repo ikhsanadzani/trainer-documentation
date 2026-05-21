@@ -123,9 +123,19 @@ mount -o rw,nodev,nosuid,relatime /dev/proc/home /mnt/home
 ```
 pacstrap /mnt intel linux-lts linux-lts-headers iwd base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster
 ```
-#fstab
+# fstab
 ```
 genfstab -U /mnt > /mnt/etc/fstab
+```
+# network
+```
+cp /etc/systemd/network/* /mnt/etc/systemd/network
+```
+```
+mkdir /mnt/var/lib/iwd
+```
+```
+cp -r /var/lib/iwd/* /mnt/var/lib/iwd
 ```
 # chroot
 ```
