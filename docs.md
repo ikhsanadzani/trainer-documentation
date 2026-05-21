@@ -141,3 +141,89 @@ cp -r /var/lib/iwd/* /mnt/var/lib/iwd
 ```
 arch-chroot /mnt
 ```
+
+# USER KOMPUTER
+
+## jika 1 kata tidak perlu pake `""` kalo lebih menggunakan petik `""`
+```
+echo [nama komputer] > /etc/hostname
+```
+
+# LOCALTIME
+```
+ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+```
+```
+hwclock --systohc
+```
+****
+# LOCALE
+
+```
+nvim /etc/locale.gen
+```
+
+## lalu pencarian di nvim menggunakan `/`
+
+```
+lalu uncommenting kedua en_US
+```
+
+### generate bahasa yg di uncommenting 
+```
+locale-gen
+```
+
+```
+locale > /etc/locale.conf
+```
+
+### config locale
+```
+nvim /etc/locale.conf
+```
+### config file locale 
+```
+isi lang=C menjadi lang=en_US.UTF-8
+dan isi ALL=en_US.UTF-8
+```
+****
+# USERADD
+```
+useradd -m [user]
+passwd [user]
+```
+```
+echo 'nama_user ALL=(ALL:ALL) ALL' >> /etc/sudoers.d/none
+```
+```
+usermod -aG wheel [user]
+```
+****
+
+# KERNEL PARAMETER
+```
+mkdir /etc/cmdline.d
+```
+```
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
+```
+
+## CONFIG KERNEL PARAMETER
+
+### 01-boot.conf
+```
+nvim /etc/cmdline.d/01-boot.conf
+```
+#### ISI DENGAN
+```
+root=/dev/[partisi root]
+```
+### 06-misc.conf
+```
+nvim /etc/cmdline.d/06-misc.conf
+```
+#### ISI DENGAN
+```
+rw quiet
+```
