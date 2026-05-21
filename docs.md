@@ -142,14 +142,14 @@ cp -r /var/lib/iwd/* /mnt/var/lib/iwd
 arch-chroot /mnt
 ```
 
-# USER KOMPUTER
+
 
 ## jika 1 kata tidak perlu pake `""` kalo lebih menggunakan petik `""`
 ```
 echo [nama komputer] > /etc/hostname
 ```
 
-# LOCALTIME
+## LOCALTIME
 ```
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 ```
@@ -157,7 +157,7 @@ ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 hwclock --systohc
 ```
 ****
-# LOCALE
+## LOCALE
 
 ```
 nvim /etc/locale.gen
@@ -188,7 +188,7 @@ isi lang=C menjadi lang=en_US.UTF-8
 dan isi ALL=en_US.UTF-8
 ```
 ****
-# USERADD
+## USERADD
 ```
 useradd -m [user]
 passwd [user]
@@ -201,27 +201,23 @@ usermod -aG wheel [user]
 ```
 ****
 
-# KERNEL PARAMETER
+## KERNEL PARAMETER
 ```
 mkdir /etc/cmdline.d
 ```
 ```
-touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-nets.conf,06-misc.conf}
+touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-misc.conf}
 ```
 
 ## CONFIG KERNEL PARAMETER
 
 ### 01-boot.conf
 ```
-nvim /etc/cmdline.d/01-boot.conf
+echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/proc/root" /etc/cmdline.d/01-boot.conf
 ```
-#### ISI DENGAN
+### 05-misc.conf
 ```
-root=/dev/[partisi root]
-```
-### 06-misc.conf
-```
-nvim /etc/cmdline.d/06-misc.conf
+nvim /etc/cmdline.d/05-misc.conf
 ```
 #### ISI DENGAN
 ```
