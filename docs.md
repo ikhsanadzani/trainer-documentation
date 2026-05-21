@@ -213,7 +213,7 @@ touch /etc/cmdline.d/{01-boot.conf,02-mods.conf,03-secs.conf,04-perf.conf,05-mis
 
 ### 01-boot.conf
 ```
-echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/proc/root" /etc/cmdline.d/01-boot.conf
+echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/proc/root" > /etc/cmdline.d/01-boot.conf
 ```
 ### 05-misc.conf
 ```
@@ -222,4 +222,38 @@ nvim /etc/cmdline.d/05-misc.conf
 #### ISI DENGAN
 ```
 rw quiet
+```
+### PREPARE BOOT
+```
+cd boot/
+```
+```
+mkdir kernel efi
+```
+```
+mkdir efi/linux
+```
+#### Jika intel
+```
+mv /boot/intel-ucode kernel/
+```
+#### Jika amd
+```
+mv /boot/amd-ucode kernel/
+```
+----
+```
+mv /boot/vmlinuz-linux kernel/
+```
+```
+ls kernel/
+rm -rf initramfs-*
+```
+****
+# MKINITCPIO
+```
+mv /etc/mkinitcpio.conf /etc/mkinitcpio.d/default.conf
+```
+```
+nvim /etc/mkinitcpio.d/linux.preset
 ```
