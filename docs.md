@@ -214,13 +214,44 @@ echo "rd.luks.name=$(blkid -o UUID -s value /dev/patition_root)=proc root=/dev/p
 
 ## BOOSTER
 ```
+nvim /etc/booster.yaml
+```
+add value
+```
+network: true
+modules: vfat, ext4, nvme
+compression: zstd
+enable_lvm: true
+```
+```
 cd /boot
 ```
 ```
 /usr/lib/booster/regenerate_images
 ```
 ```
-efibootmgr --create --disk /dev/partition_boot --part 1 --label "Arch Linux" --loader /vmlinuz-linux-lts -u "initrd /intel-ucode.img"  -u "initrd /booster-linux.img" unicode "$(cat /etc/kernel/cmdline)"
+booctl --path=/boot install
+```
+```
+echo "title   Arch Linux Minimal" > /boot/loader/entries/arch.conf
+```
+```
+echo "linux   /vmlinuz-linux-lts" >> /boot/loader/entries/arch.conf
+```
+```
+echo "initrd  /intel-ucode.img" >> /boot/loader/entries/arch.conf
+```
+```
+echo "initrd  /booster-linux-lts.img" >> /boot/loader/entries/arch.conf
+```
+```
+echo "options $(cat /etc/kernel/cmdline) rw >> /boot/loader/entries/arch.conf
+```
+```
+echo "default  arch.conf" >> /boot/loader/loader.conf
+```
+```
+touch /etc/vconsole.conf
 ```
 
 ## booting
