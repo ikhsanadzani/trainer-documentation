@@ -69,7 +69,7 @@ lsblk (lagi)
 ****
 
 # partition
-##lvm
+## lvm
 ```
 pvcreate /dev/[partisi root]
 ```
