@@ -102,11 +102,11 @@ mount -o rw,nodev,nosuid,relatime /dev/proc/home /mnt/home
 
 ## user administrator
 ```
-lvcreate -L size (G | M) proc -n [user]
+lvcreate -L size (G | M) proc -n 
 ```
 
 ```
-cryp
+cryptsetup luksFormat /dev/proc/[nama]
 ```
 # packages
 ```
