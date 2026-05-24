@@ -17,7 +17,7 @@ lvcreate -L size (G | M) proc -n vars
 ```
 lvcreate -L size (G | M) proc -n vtmp
 ```
-|``
+```
 lvcreate -L size (G | M) proc -n vlog
 ```
 ```
@@ -61,115 +61,62 @@ mkfs.ext4 /dev/proc/vaud
 ```
 
 ```
+mkfs.ext4 /dev/proc/home
+```
+
+```
+mkfs.ext4 /dev/proc/[name]
+```
+
+## Mounting
+```
 mount /dev/proc/root /mnt
 ```
 
-## boot
+```
+mount --mkdir -o uid=0,gid=0,dmask=0077,fmask=0077 /dev/paritition /mnt/boot
 ```
 
 ```
-```
-mkdir /mnt/boot
-```
-```
-mount /dev/paritition /mnt/boot
-```
-
-
-## var
+mount --mkdir -o rw,nodev,nosuid,relatime /dev/proc/vars /mnt/var
 ```
 
 ```
-
-```
-```
-mkdir /mnt/var
-```
-```
-mount -o rw,nodev,nosuid,relatime /dev/proc/vars /mnt/var
-```
-
-
-## vtmp
+mount --mkdir -o rw,nodev,nosuid,noexec,relatime /dev/proc/vtmp /mnt/var/tmp
 ```
 
 ```
-mkfs.ext4 /dev/proc/vtmp
-```
-```
-mkdir /mnt/var/tmp
-```
-```
-mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/vtmp /mnt/var/tmp
-```
-
-## vlog
+mount --mkdir -o rw,nodev,nosuid,noexec,relatime /dev/proc/vlog /mnt/var/log
 ```
 
 ```
-mkfs.ext4 /dev/proc/vlog
-```
-```
-mkdir /mnt/var/log
-```
-```
-mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/vlog /mnt/var/log
-```
-
-## vaud
-```
-lvcreate -L size (G | M) proc -n vaud
-```
-```
-mkfs.ext4 /dev/proc/vaud
-```
-```
-mkdir /mnt/var/log/audit
-```
-```
-mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/vaud /mnt/var/log/audit
-```
-
-## home (user publik)
-```
-lvcreate -L size (G | M) proc -n home
-```
-```
-mkfs.ext4 /dev/proc/home
-```
-```
-mkdir /mnt/home
-```
-```
-mount -o rw,nodev,nosuid,relatime /dev/proc/home /mnt/home
-```
-
-## user administrator
-```
-lvcreate -L size (G | M) proc -n 
+mount --mkdir -o rw,nodev,nosuid,noexec,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
 
 ```
-cryptsetup luksFormat /dev/proc/[nama]
+mount --mkdir -o rw,nodev,nosuid,noexec,relatime /dev/proc/home /mnt/home
 ```
-# packages
+## packages
+### intel
 ```
-pacstrap /mnt intel linux-lts linux-lts-headers iwd lvm2 base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster efibootmgr
+pacstrap /mnt intel-ucode linux-lts linux-lts-headers linux-firmware networkmanager lvm2 base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster efibootmgr
 ```
-# fstab
+
+### amd
+```
+pacstrap /mnt amd-ucode linux-lts linux-lts-headers linux-firmware iwd lvm2 base base-devel neovim openssh superfile podman podman-desktop iptables mpd mpc mpv keepassxc secrets booster efibootmgr
+```
+
+
+## fstab
 ```
 genfstab -U /mnt > /mnt/etc/fstab
 ```
-# network
+## formating tmpfs ke tmp
 ```
-cp /etc/systemd/network/* /mnt/etc/systemd/network
+echo "/tmpfs /tmp  tmpfs  defaults,nosuid,nodev,noexec,size=1G  0  0" >> /mnt/etc/fstab
 ```
-```
-mkdir /mnt/var/lib/iwd
-```
-```
-cp -r /var/lib/iwd/* /mnt/var/lib/iwd
-```
+
 # chroot
 ```
 arch-chroot /mnt
@@ -223,8 +170,11 @@ dan isi ALL=en_US.UTF-8
 ****
 ## USERADD
 ```
-useradd -m [user]
-passwd [user]
+mkdir /home/user
+```
+```
+useradd -d  /home/user [user name]
+passwd [user name]
 ```
 ```
 echo 'nama_user ALL=(ALL:ALL) ALL' >> /etc/sudoers.d/none
