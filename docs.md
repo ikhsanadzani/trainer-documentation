@@ -1,15 +1,9 @@
 # partition
 ```
-cryptsetup luksFormat /dev/partition
+pvcreate /dev/[partisi root]
 ```
 ```
-cryptsetup luksOpen /dev/partition system
-```
-```
-pvcreate /dev/mapper/system
-```
-```
-vgcreate proc /dev/mapper/system
+vgcreate proc /dev/[partisi root]
 ```
 
 ## root
