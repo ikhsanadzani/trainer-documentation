@@ -86,21 +86,7 @@ mkdir /mnt/var/log/audit
 mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/vaud /mnt/var/log/audit
 ```
 
-## temp
-```
-lvcreate -L size (G | M) proc -n temp
-```
-```
-mkfs.ext4 /dev/proc/temp
-```
-```
-mkdir /mnt/tmp
-```
-```
-mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/temp /mnt/tmp
-```
-
-## home
+## home (user publik)
 ```
 lvcreate -L size (G | M) proc -n home
 ```
@@ -112,6 +98,15 @@ mkdir /mnt/home
 ```
 ```
 mount -o rw,nodev,nosuid,relatime /dev/proc/home /mnt/home
+```
+
+## user administrator
+```
+lvcreate -L size (G | M) proc -n [user]
+```
+
+```
+cryp
 ```
 # packages
 ```
