@@ -1,4 +1,5 @@
 # partition
+##lvm
 ```
 pvcreate /dev/[partisi root]
 ```
@@ -6,20 +7,66 @@ pvcreate /dev/[partisi root]
 vgcreate proc /dev/[partisi root]
 ```
 
-## root
+## logical volume
 ```
 lvcreate -L size (G | M) proc -n root
 ```
 ```
+lvcreate -L size (G | M) proc -n vars
+```
+```
+lvcreate -L size (G | M) proc -n vtmp
+```
+|``
+lvcreate -L size (G | M) proc -n vlog
+```
+```
+lvcreate -L size (G | M) proc -n vaud
+```
+```
+lvcreate -L size (G | M) proc -n home
+```
+```
+lvcreate -L size (G | M) proc -n [name]
+```
+
+## luks
+```
+cryptsetup luksFormat /dev/proc/[name]
+```
+
+## formating 
+```
 mkfs.ext4 /dev/proc/root
 ```
+
+```
+mkfs.vfat -F32 -n BOOT /dev/[partisi boot]
+```
+
+```
+mkfs.ext4 /dev/proc/vars
+```
+
+```
+mkfs.ext4 /dev/proc/vtmp
+```
+
+```
+mkfs.ext4 /dev/proc/vlog
+```
+
+```
+mkfs.ext4 /dev/proc/vaud
+```
+
 ```
 mount /dev/proc/root /mnt
 ```
 
 ## boot
 ```
-mkfs.vfat -F32 -n BOOT /dev/partition
+
 ```
 ```
 mkdir /mnt/boot
@@ -31,10 +78,9 @@ mount /dev/paritition /mnt/boot
 
 ## var
 ```
-lvcreate -L size (G | M) proc -n vars
+
 ```
-```
-mkfs.ext4 /dev/proc/vars
+
 ```
 ```
 mkdir /mnt/var
@@ -46,8 +92,7 @@ mount -o rw,nodev,nosuid,relatime /dev/proc/vars /mnt/var
 
 ## vtmp
 ```
-lvcreate -L size (G | M) proc -n vtmp
-```
+
 ```
 mkfs.ext4 /dev/proc/vtmp
 ```
@@ -60,8 +105,7 @@ mount -o rw,nodev,nosuid,noexec,relatime /dev/proc/vtmp /mnt/var/tmp
 
 ## vlog
 ```
-lvcreate -L size (G | M) proc -n vlog
-```
+
 ```
 mkfs.ext4 /dev/proc/vlog
 ```
